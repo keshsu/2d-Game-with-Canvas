@@ -11,26 +11,31 @@ class Boundary {
   static width = 40;
   static height = 40;
 
-  constructor({ position }) {
+  constructor({ position, image, color }) {
     this.position = position;
     this.width = 40;
     this.height = 40;
+    this.image = image;
+    this.color = color;
   }
   draw() {
-    ctx.fillStyle = "blue";
-    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+    ctx.fillStyle = this.color;
+    ctx.drawImage(this.image, this.position.x, this.position.y);
+    // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }
 
 class Pellet {
   constructor({ position }) {
     this.position = position;
-    this.width = 40;
-    this.height = 40;
+    this.radius = 3;
   }
   draw() {
-    ctx.fillStyle = "blue";
-    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+    ctx.beginPath();
+    ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+    ctx.closePath();
   }
 }
 
@@ -89,7 +94,7 @@ const keys = {
 let lastKey = "";
 
 function createImage(src) {
-  let image = new Image();
+  const image = new Image();
   image.src = src;
   return image;
 }
@@ -197,6 +202,21 @@ function animate() {
     }
   }
 
+  for (let i = pellets.length - 1; 0 < i; i--) {
+    const pellet = pellets[i];
+
+    pellet.draw();
+    if (
+      Math.hypot(
+        (pellet.position.x = player.position.x),
+        pellet.position.y - player.position.y
+      ) <
+      pellet.radius + player.radius
+    ) {
+      pellets.splice(i, 1);
+    }
+  }
+
   boundaries.forEach((boundary) => {
     boundary.draw();
     if (circleCollidesWithRectangle({ circle: player, rectangle: boundary })) {
@@ -204,6 +224,8 @@ function animate() {
       player.velocity.y = 0;
     }
   });
+
   player.update();
 }
+
 animate();
