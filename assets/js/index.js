@@ -7,6 +7,9 @@ canvas.height = innerHeight;
 let x = 0;
 let y = 0;
 
+const boundaries = [];
+const pellets = [];
+
 class Boundary {
   static width = 40;
   static height = 40;
@@ -19,9 +22,9 @@ class Boundary {
     this.color = color;
   }
   draw() {
+    // ctx.drawImage(this.image, this.position.x, this.position.y);
     ctx.fillStyle = this.color;
-    ctx.drawImage(this.image, this.position.x, this.position.y);
-    // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }
 
@@ -56,14 +59,12 @@ class Player {
 
   update() {
     this.draw();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 }
 
-const boundaries = [];
-const pellets = [];
 
 const player = new Player({
   position: {
@@ -93,11 +94,201 @@ const keys = {
 
 let lastKey = "";
 
-function createImage(src) {
-  const image = new Image();
-  image.src = src;
-  return image;
-}
+map.forEach((row, i) => {
+  row.forEach((symbol, j) => {
+    switch (symbol) {
+      case "-":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: Boundary.width * j,
+              y: Boundary.height * i,
+            },
+            image: createImage("./assets/images/pipeHorizontal.png"),
+          })
+        );
+        break;
+      case "|":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: Boundary.width * j,
+              y: Boundary.height * i,
+            },
+            image: createImage("./assets/images/pipeVertical.png"),
+          })
+        );
+        break;
+      case "1":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: Boundary.width * j,
+              y: Boundary.height * i,
+            },
+            image: createImage("./assets/images/pipeCorner1.png"),
+          })
+        );
+        break;
+      case "2":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: Boundary.width * j,
+              y: Boundary.height * i,
+            },
+            image: createImage("./assets/images/pipeCorner2.png"),
+          })
+        );
+        break;
+      case "3":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: Boundary.width * j,
+              y: Boundary.height * i,
+            },
+            image: createImage("./assets/images/pipeCorner3.png"),
+          })
+        );
+        break;
+      case "4":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: Boundary.width * j,
+              y: Boundary.height * i,
+            },
+            image: createImage("./assets/images/pipeCorner4.png"),
+          })
+        );
+        break;
+      case "b":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: Boundary.width * j,
+              y: Boundary.height * i,
+            },
+            image: createImage("./assets/images/block.png"),
+          })
+        );
+        break;
+      case "[":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: j * Boundary.width,
+              y: i * Boundary.height,
+            },
+            image: createImage("./assets/images/capLeft.png"),
+          })
+        );
+        break;
+      case "]":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: j * Boundary.width,
+              y: i * Boundary.height,
+            },
+            image: createImage("./assets/images/capRight.png"),
+          })
+        );
+        break;
+      case "_":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: j * Boundary.width,
+              y: i * Boundary.height,
+            },
+            image: createImage("./assets/images/capBottom.png"),
+          })
+        );
+        break;
+      case "^":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: j * Boundary.width,
+              y: i * Boundary.height,
+            },
+            image: createImage("./assets/images/capTop.png"),
+          })
+        );
+        break;
+      case "+":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: j * Boundary.width,
+              y: i * Boundary.height,
+            },
+            image: createImage("./assets/images/pipeCross.png"),
+          })
+        );
+        break;
+      case "5":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: j * Boundary.width,
+              y: i * Boundary.height,
+            },
+            color: "blue",
+            image: createImage("./assets/images/pipeConnectorTop.png"),
+          })
+        );
+        break;
+      case "6":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: j * Boundary.width,
+              y: i * Boundary.height,
+            },
+            color: "blue",
+            image: createImage("./assets/images/pipeConnectorRight.png"),
+          })
+        );
+        break;
+      case "7":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: j * Boundary.width,
+              y: i * Boundary.height,
+            },
+            color: "blue",
+            image: createImage("./assets/images/pipeConnectorBottom.png"),
+          })
+        );
+        break;
+      case "8":
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: j * Boundary.width,
+              y: i * Boundary.height,
+            },
+            image: createImage("./assets/images/pipeConnectorLeft.png"),
+          })
+        );
+        break;
+      case ".":
+        pellets.push(
+          new Pellet({
+            position: {
+              x: j * Boundary.width + Boundary.width / 2,
+              y: i * Boundary.height + Boundary.height / 2,
+            },
+          })
+        );
+        break;
+    }
+  });
+});
 
 function circleCollidesWithRectangle({ circle, rectangle }) {
   return (
@@ -115,7 +306,16 @@ function circleCollidesWithRectangle({ circle, rectangle }) {
 function animate() {
   requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  boundaries.forEach((boundary) => {
+    boundary.draw();
+  
+    if (circleCollidesWithRectangle({ circle: player, rectangle: boundary })) {
+      player.velocity.x = 0;
+      player.velocity.y = 0;
+    }
+  });
 
+  
   if (keys.w.pressed && lastKey === "w") {
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
@@ -217,15 +417,8 @@ function animate() {
     }
   }
 
-  boundaries.forEach((boundary) => {
-    boundary.draw();
-    if (circleCollidesWithRectangle({ circle: player, rectangle: boundary })) {
-      player.velocity.x = 0;
-      player.velocity.y = 0;
-    }
-  });
-
   player.update();
 }
+
 
 animate();
