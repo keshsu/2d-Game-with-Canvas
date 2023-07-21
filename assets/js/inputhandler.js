@@ -1,38 +1,46 @@
 addEventListener("keydown", function (e) {
   switch (e.code) {
-    case "ArrowUp" || "KeyW":
+    case "ArrowUp":
+    case "KeyW":
       keys.w.pressed = true;
-      lastKey = 'w';
+      lastKey = "w";
       break;
-    case "ArrowLeft" || "KeyA":
+    case "ArrowLeft":
+    case "KeyA":
       keys.a.pressed = true;
-      lastKey = 'a';
+      lastKey = "a";
       break;
-    case "ArrowDown" || "KeyS":
-      keys.a.pressed = true;
-      lastKey = 's';
+    case "ArrowDown":
+    case "KeyS":
+      keys.s.pressed = true;
+      lastKey = "s";
       break;
-    case "ArrowRight" || "KeyD":
-      keys.a.pressed = true;
-      lastKey = 'd';
-      break;
+    case "ArrowRight":
+    case "KeyD":
+      keys.d.pressed = true;
+      lastKey = "d";
+    break;
     default:
       break;
   }
 });
 addEventListener("keyup", function (e) {
   switch (e.code) {
-    case "ArrowUp" || "KeyW":
+    case "ArrowUp":
+    case "KeyW":
       keys.w.pressed = false;
       break;
-    case "ArrowLeft" || "KeyA":
+    case "ArrowLeft":
+    case "KeyA":
       keys.a.pressed = false;
       break;
-    case "ArrowDown" || "KeyS":
-      keys.a.pressed = false;
+    case "ArrowDown":
+    case "KeyS":
+      keys.s.pressed = false;
       break;
-    case "ArrowRight" || "KeyD":
-      keys.a.pressed = false;
+    case "ArrowRight":
+    case "KeyD":
+      keys.d.pressed = false;
       break;
     default:
       break;
