@@ -554,15 +554,19 @@ function animate() {
         case "down":
           ghost.velocity.y = ghost.speed;
           ghost.velocity.x = 0;
+          break;
         case "up":
           ghost.velocity.y = -ghost.speed;
           ghost.velocity.x = 0;
+          break;
         case "right":
+          ghost.velocity.y = 0;
           ghost.velocity.x = ghost.speed;
-          ghost.velocity.y = 0;
+          break;
         case "left":
-          ghost.velocity.x = -ghost.speed;
           ghost.velocity.y = 0;
+          ghost.velocity.x = -ghost.speed;
+          break;
       }
 
       ghost.prevCollisions = [];
